@@ -34,6 +34,7 @@ urlpatterns = [
     path('order/', include('order.urls')),
     path('newsletter/', include('newsletter.urls')),
     path('category/', include('category.urls')),
+    path('info/', include('info.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
