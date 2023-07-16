@@ -152,3 +152,8 @@ REST_FRAMEWORK = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 AUTH_USER_MODEL = 'authen.User'
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-d35c.up.railway.app/'
+]
