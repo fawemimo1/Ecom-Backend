@@ -15,3 +15,11 @@ class ProductImageViewAPI(viewsets.ModelViewSet):
 class ProductDetailViewAPI(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
+
+
+class ImageFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = ProductImageSerializer
+    def get_queryset(self):
+        product_id = self.request.query_params.get('product_id')
+        queryset = ProductImage.objects.filter(product=product_id)
+        return queryset
