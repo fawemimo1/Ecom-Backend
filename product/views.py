@@ -28,5 +28,5 @@ class CategoryProductFetchAPIView(viewsets.ModelViewSet):
     serializer_class = ProductDetailSerializer
     def get_queryset(self):
         category_id = self.request.query_params.get('category_id')
-        queryset = ProductImage.objects.filter(product=category_id)
+        queryset = ProductImage.objects.filter(category=category_id)
         return queryset
