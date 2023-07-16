@@ -6,8 +6,6 @@ from datetime import date
 from django.utils.translation import gettext as _
 
 class User(AbstractUser):
-	username = models.CharField(
-        max_length=50, blank=True, null=True, unique=False, default="")
 	email = models.EmailField(_('email address'), unique = True)
 	phone_number = models.CharField(max_length=15, null=True, blank=True)
 	address = models.CharField(max_length=100, null=True, blank=True)
@@ -15,7 +13,7 @@ class User(AbstractUser):
 	zip_code = models.CharField(max_length=10, null=True, blank=True)
 	date_created = models.DateTimeField(auto_now_add=True)
 	USERNAME_FIELD = 'email'
-	REQUIRED_FIELDS = ['first_name', 'last_name', 'username']
+	REQUIRED_FIELDS = ['username']
 	def __str__(self):
 		return str(self.email)
 	
