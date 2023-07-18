@@ -20,3 +20,57 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
         depth = 1
+
+class HomeProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeProduct
+        fields = '__all__'
+
+class NewProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewProduct
+        fields = '__all__'
+
+class TopProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TopProduct
+        fields = '__all__'
+
+class HomeProductDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeProduct
+        fields = '__all__'
+        depth = 1
+
+class NewProductDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewProduct
+        fields = '__all__'
+        depth = 1
+
+class TopProductDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TopProduct
+        fields = '__all__'
+        depth = 1
+
+
+class NewProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewProductImage
+        fields = '__all__'
+
+class HomeProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeProductImage
+        fields = '__all__'
+
+class TopProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TopProductImage
+        fields = '__all__'
+
+class HomeBannerImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeBannerImage
+        fields = '__all__'
