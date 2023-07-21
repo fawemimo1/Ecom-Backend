@@ -3,8 +3,8 @@ from .views import *
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register('cart', CartViewSet, basename='cart')
-router.register('cart-fetch', CartFetchAPIView, basename='cart-fetch')
+router.register('wish_list', WishListViewSet, basename='cart_api')
+router.register('wish_fetch', WishListFetchAPIView, basename='cart_fetch_api')
 
 urlpatterns = [
     path('', include(router.urls)),

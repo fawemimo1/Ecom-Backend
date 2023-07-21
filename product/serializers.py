@@ -25,3 +25,14 @@ class HomeBannerImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeBannerImage
         fields = '__all__'
+
+class SizeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Size
+        fields = '__all__'
+
+
+class ColorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Color
+        fields = '__all__'

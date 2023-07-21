@@ -13,6 +13,12 @@ class Product(models.Model):
     home_product = models.BooleanField(default=False)
     top_product = models.BooleanField(default=False)
     new_product = models.BooleanField(default=False)
+    show_size = models.BooleanField(default=False)
+    show_color = models.BooleanField(default=False)
+    show_gender = models.BooleanField(default=False)
+    size = models.CharField(max_length=255, null=True, blank=True)
+    color = models.CharField(max_length=255, null=True, blank=True)
+    gender = models.CharField(max_length=255, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -36,3 +42,16 @@ class HomeBannerImage(models.Model):
 
     def __str__(self):
         return str(self.image)
+    
+
+class Size(models.Model):
+    size = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.size)
+    
+class Color(models.Model):
+    color = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.color)

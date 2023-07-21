@@ -55,4 +55,15 @@ class HomeBannerImageAPIView(viewsets.ModelViewSet):
         queryset = HomeBannerImage.objects.all()
         return queryset
     
+class SizeAPIView(viewsets.ModelViewSet):
+    serializer_class = SizeSerializer
+    def get_queryset(self):
+        queryset = Size.objects.all()
+        return queryset
     
+
+class ColorAPIView(viewsets.ModelViewSet):
+    serializer_class = ColorSerializer
+    def get_queryset(self):
+        queryset = Color.objects.all()
+        return queryset

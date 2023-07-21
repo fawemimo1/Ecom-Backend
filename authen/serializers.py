@@ -23,6 +23,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['zip_code'] = user.zip_code
         token['first_name'] = user.first_name
         token['last_name'] = user.last_name
+        token['admin'] = user.admin
         
         return token
 
@@ -53,7 +54,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('password', 'email', 'first_name',
-                  'last_name', 'phone_number', 'address', 'country', 'zip_code')
+                  'last_name', 'phone_number', 'address', 'country', 'zip_code', 'admin')
         extra_kwargs = {
             'last_name': {'required': False}
         }
@@ -68,6 +69,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             address=validated_data['address'],
             country=validated_data['country'],
             zip_code=validated_data['zip_code'],
+            admin=validated_data['admin']
         )
 
         user.set_password(validated_data['password'])

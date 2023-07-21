@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import Cart
+from .models import WishList
 
-class CartSerializer(serializers.ModelSerializer):
+class WishListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Cart
+        model = WishList
         fields = '__all__'
         depth = 1

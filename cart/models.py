@@ -4,9 +4,9 @@ User = settings.AUTH_USER_MODEL
 from product.models import Product
 # Create your models here.
 
-class Cart(models.Model):
+class WishList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    products = models.ManyToManyField(Product, related_name='cart_products')
+    product_data = models.JSONField(null=True, blank=True)
     total = models.FloatField(null=True, blank=True)
     clear = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
