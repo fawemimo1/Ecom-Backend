@@ -31,14 +31,6 @@ urlpatterns = [
         'patch': 'partial_update',
         'delete': 'destroy'
     }), name='shipping_address_api'),
-    path('profile-fetch', ProfileFetchAPIView.as_view(
-        {'get': 'list', 
-        'post': 'create',
-        'put': 'update',
-        'patch': 'partial_update',
-        'delete': 'destroy'
-         }
-    ), name='profile_fetch_api'),
 
 
     path('send-sms/', SendSMS.as_view(), name='send-sms'),
