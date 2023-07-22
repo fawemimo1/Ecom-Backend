@@ -9,7 +9,6 @@ class User(AbstractUser):
     email = models.CharField(max_length=255, null=True, blank=True, unique=False)
     admin = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(auto_now=True)
 
 
     def __str__(self):
