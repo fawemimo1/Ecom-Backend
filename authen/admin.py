@@ -12,12 +12,12 @@ from django.contrib.auth.admin import UserAdmin
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ['username', 'first_name', 'email']
+    list_display = ['username',]
     fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('phone_number', 'address', 'country', 'zip_code', 'admin')}),
+        (None, {'fields': ('admin',)}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
-        (None, {'fields': ('phone_number', 'address', 'country', 'zip_code', 'admin')}),
+        (None, {'fields': ( 'admin',)}),
     )
 
 admin.site.register(User, CustomUserAdmin)
