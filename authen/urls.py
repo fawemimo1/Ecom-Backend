@@ -21,16 +21,25 @@ urlpatterns = [
          name='auth_change_password'),
     path('register',
          RegisterView.as_view({'post': 'create'}), name='auth_register'),
-    path('shipping_address', ShippingAddressViewAPI.as_view({
+    path('profile', ProfileViewAPI.as_view({
         'get': 'list',
         'post': 'create'
     }), name='shipping_address_list'),
-    path('shipping_address/<int:pk>', ShippingAddressViewAPI.as_view({
+    path('profile/<int:pk>', ProfileViewAPI.as_view({
         'get': 'retrieve',
         'put': 'update',
         'patch': 'partial_update',
         'delete': 'destroy'
     }), name='shipping_address_api'),
+    path('profile-fetch', ProfileFetchAPIView.as_view(
+        {'get': 'list', 
+        'post': 'create',
+        'put': 'update',
+        'patch': 'partial_update',
+        'delete': 'destroy'
+         }
+    ), name='profile_fetch_api'),
+
 
     path('send-sms/', SendSMS.as_view(), name='send-sms'),
 ]

@@ -31,24 +31,6 @@ class CategoryProductFetchAPIView(viewsets.ModelViewSet):
         queryset = Product.objects.filter(category=category_id)
         return queryset
     
-class HomeProductAPIView(viewsets.ModelViewSet):
-    serializer_class = ProductSerializer
-    def get_queryset(self):
-        queryset = Product.objects.filter(home_product=True)
-        return queryset
-    
-class NewProductAPIView(viewsets.ModelViewSet):
-    serializer_class = ProductSerializer
-    def get_queryset(self):
-        queryset = Product.objects.filter(new_product=True)
-        return queryset
-    
-class TopProductAPIView(viewsets.ModelViewSet):
-    serializer_class = ProductSerializer
-    def get_queryset(self):
-        queryset = Product.objects.filter(top_product=True)
-        return queryset
-    
 class HomeBannerImageAPIView(viewsets.ModelViewSet):
     serializer_class = HomeBannerImageSerializer
     def get_queryset(self):

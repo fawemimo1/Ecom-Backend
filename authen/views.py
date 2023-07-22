@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework import viewsets
 import requests
+
 # from django.contrib.auth import get_user_model
 # User = get_user_model()
 
@@ -77,10 +78,16 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response(response)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class ShippingAddressViewAPI(viewsets.ModelViewSet):
-    queryset = ShippingAddress.objects.all()
-    serializer_class = ShippingAddressSerializer
+class ProfileViewAPI(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = Profile
 
+class ProfileFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = ProfileSerializer
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user_id')
+        queryset = Profile.objects.filter(user=user_id)
+        return queryset
 
 class SendSMS(APIView):
     def post(self, request, format=None):
