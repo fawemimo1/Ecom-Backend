@@ -80,7 +80,7 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 class ProfileViewAPI(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
-    serializer_class = Profile
+    serializer_class = ProfileSerializer
 
 class SendSMS(APIView):
     def post(self, request, format=None):
