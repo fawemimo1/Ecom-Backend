@@ -82,13 +82,6 @@ class ProfileViewAPI(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = Profile
 
-class ProfileFetchAPIView(viewsets.ModelViewSet):
-    serializer_class = ProfileSerializer
-    def get_queryset(self):
-        user_id = self.request.query_params.get('user_id')
-        queryset = Profile.objects.filter(user=user_id)
-        return queryset
-
 class SendSMS(APIView):
     def post(self, request, format=None):
         url = "https://www.fast2sms.com/dev/bulkV2"

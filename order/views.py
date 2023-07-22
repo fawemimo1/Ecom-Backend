@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .models import *
 from rest_framework import viewsets
 from .serializers import *
+from authen.models import *
+from authen.serializers import *
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -21,4 +23,11 @@ class OrderFetchAPIView(viewsets.ModelViewSet):
     def get_queryset(self):
         user_id = self.request.query_params.get('user_id')
         queryset = Order.objects.filter(user=user_id)
+        return queryset
+    
+class ProfileFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = ProfileSerializer
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user_id')
+        queryset = Profile.objects.filter(user=user_id)
         return queryset
