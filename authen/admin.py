@@ -21,4 +21,4 @@ class CustomUserAdmin(UserAdmin):
     )
 
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(ShippingAddress)
+admin.site.register(Profile)
