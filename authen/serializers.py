@@ -15,15 +15,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
-
         # Add custom claims
+        token['username'] = user.username
         token['email'] = user.email
-        token['phone_number'] = user.phone_number
-        token['address'] = user.address
-        token['country'] = user.country
-        token['zip_code'] = user.zip_code
-        token['first_name'] = user.first_name
-        token['last_name'] = user.last_name
         token['admin'] = user.admin
         
         return token
@@ -37,8 +31,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'password', 'email', 'phone_number',
-                  'first_name', 'last_name', 'date_created', 'zip_code', 'country', 'address')
+        fields = ('id', 'password', 'date_created', 'username', 'admin' )
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -54,23 +47,17 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('password', 'email', 'first_name',
-                  'last_name', 'phone_number', 'address', 'country', 'zip_code', 'admin')
+        fields = ('password', 'email', 'admin', 'username')
         extra_kwargs = {
-            'last_name': {'required': False}
+            'email' : {'required': False}
         }
 
 
     def create(self, validated_data):
         user = User.objects.create(
             email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
-            phone_number=validated_data['phone_number'],
-            address=validated_data['address'],
-            country=validated_data['country'],
-            zip_code=validated_data['zip_code'],
-            admin=validated_data['admin']
+            admin=validated_data['admin'],
+            username=validated_data['username']
         )
 
         user.set_password(validated_data['password'])
