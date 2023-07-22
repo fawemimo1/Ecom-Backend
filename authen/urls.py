@@ -31,4 +31,6 @@ urlpatterns = [
         'patch': 'partial_update',
         'delete': 'destroy'
     }), name='shipping_address_api'),
+
+    path('send-sms/', SendSMS.as_view(), name='send-sms'),
 ]
