@@ -44,12 +44,14 @@ class HomeBannerImage(models.Model):
     
 
 class Size(models.Model):
+    product = models.ForeignKey(Product, related_name='sizes', on_delete=models.CASCADE)
     size = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return str(self.size)
     
 class Color(models.Model):
+    product = models.ForeignKey(Product, related_name='colors', on_delete=models.CASCADE)
     color = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):

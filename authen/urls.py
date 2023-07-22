@@ -5,6 +5,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+
+
 urlpatterns = [
     path("user", UserViewAPI.as_view({
         'get': 'list',
@@ -19,4 +21,14 @@ urlpatterns = [
          name='auth_change_password'),
     path('register',
          RegisterView.as_view({'post': 'create'}), name='auth_register'),
+    path('shipping_address', ShippingAddressViewAPI.as_view({
+        'get': 'list',
+        'post': 'create'
+    }), name='shipping_address_list'),
+    path('shipping_address/<int:pk>', ShippingAddressViewAPI.as_view({
+        'get': 'retrieve',
+        'put': 'update',
+        'patch': 'partial_update',
+        'delete': 'destroy'
+    }), name='shipping_address_api'),
 ]
