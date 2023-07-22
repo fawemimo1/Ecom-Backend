@@ -8,7 +8,7 @@ class Product(models.Model):
     cancel_price = models.FloatField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='product/', null=True, blank=True)
-    discount = models.FloatField(null=True, blank=True)
+    discount = models.BooleanField(default=False)
     new = models.BooleanField(default=False)
     home_product = models.BooleanField(default=False)
     top_product = models.BooleanField(default=False)
