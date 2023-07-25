@@ -15,3 +15,8 @@ class WishList(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.user, self.total)
+
+    class Meta:
+        ordering = ['-created_at']  
+
+    

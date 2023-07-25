@@ -14,6 +14,9 @@ class User(AbstractUser):
 
     def __str__(self):
         return str(self.username)
+    
+    class Meta:
+        ordering = ['-date_created']  
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -31,6 +34,9 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user.username)
+    
+    class Meta:
+        ordering = ['-created_at']  
 
 @receiver(post_save, sender=User)
 def create_shipping_address(sender, instance, created, **kwargs):

@@ -10,14 +10,12 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product/', null=True, blank=True)
     discount = models.BooleanField(default=False)
     new = models.BooleanField(default=False)
-    home_product = models.BooleanField(default=False)
     top_product = models.BooleanField(default=False)
     new_product = models.BooleanField(default=False)
     show_size = models.BooleanField(default=False)
     show_color = models.BooleanField(default=False)
     show_gender = models.BooleanField(default=False)
     available_quantity = models.IntegerField(null=True, blank=True)
-    in_stock = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -25,6 +23,9 @@ class Product(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.name, self.price)
+    
+    class Meta:
+        ordering = ['-created_at']  
 
 
 class ProductImage(models.Model):
