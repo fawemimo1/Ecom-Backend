@@ -23,6 +23,7 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=255, null=True, blank=True)
     gender = models.CharField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
     alternate_number = models.CharField(max_length=255, null=True, blank=True)
     hint_name = models.CharField(max_length=255, null=True, blank=True)
     data = models.JSONField(null=True, blank=True)
