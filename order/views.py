@@ -18,6 +18,10 @@ class OrderDetailViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderDetailSerializer
 
+class AddressViewSet(viewsets.ModelViewSet):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+
 class OrderFetchAPIView(viewsets.ModelViewSet):
     serializer_class = OrderDetailSerializer
     def get_queryset(self):
@@ -30,4 +34,11 @@ class ProfileFetchAPIView(viewsets.ModelViewSet):
     def get_queryset(self):
         user_id = self.request.query_params.get('user_id')
         queryset = Profile.objects.filter(user=user_id)
+        return queryset
+    
+class AddressFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = AddressSerializer
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user_id')
+        queryset = Address.objects.filter(user=user_id)
         return queryset

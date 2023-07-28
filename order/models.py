@@ -5,19 +5,32 @@ User = settings.AUTH_USER_MODEL
 
 # Create your models here.
 
-
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    pincode = models.CharField(max_length=255)
+    locality = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    landmark = models.CharField(max_length=255)
+    alternate_phone_number = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return '{} {}'.format(self.user, self.address)
+    
+    class Meta:
+        ordering = ['-created_at']
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     order_data = models.JSONField(null=True, blank=True)
     products = models.JSONField(null=True, blank=True)
     order_id = models.CharField(max_length=255, null=True, blank=True)
-    first_name = models.CharField(max_length=255, null=True, blank=True)
-    last_name = models.CharField(max_length=255, null=True, blank=True)
-    email = models.EmailField(max_length=100, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
-    zip_code = models.CharField(max_length=255, null=True, blank=True)
-    city = models.CharField(max_length=255, null=True, blank=True)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
     phone = models.CharField(max_length=255, null=True, blank=True)
     total = models.FloatField(null=True, blank=True)
     discount = models.FloatField(null=True, blank=True)
