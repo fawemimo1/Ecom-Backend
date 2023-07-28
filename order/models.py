@@ -30,7 +30,7 @@ class Order(models.Model):
     order_data = models.JSONField(null=True, blank=True)
     products = models.JSONField(null=True, blank=True)
     order_id = models.CharField(max_length=255, null=True, blank=True)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
+    user_address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
     phone = models.CharField(max_length=255, null=True, blank=True)
     total = models.FloatField(null=True, blank=True)
     discount = models.FloatField(null=True, blank=True)
