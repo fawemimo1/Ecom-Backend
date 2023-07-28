@@ -30,6 +30,9 @@ class Order(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.order_id, self.email)
+    
+    class Meta:
+        ordering = ['-created_at']  
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -40,3 +43,6 @@ class Payment(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.order, self.created_at)
+    
+    class Meta:
+        ordering = ['-created_at']  

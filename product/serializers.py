@@ -27,12 +27,10 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     category = CategorySerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
-    color = ColorSerializer(many=True, read_only=True)
-    size = SizeSerializer(many=True, read_only=True)
     class Meta:
         model = Product
         fields = '__all__'
-        depth = 1
+        depth = 2
 
 class HomeBannerImageSerializer(serializers.ModelSerializer):
     class Meta:

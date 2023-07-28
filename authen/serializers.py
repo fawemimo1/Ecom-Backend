@@ -19,7 +19,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         token['email'] = user.email
         token['admin'] = user.admin
-        
+        token['active'] = user.active
+
         return token
 
 # class UserProfileSerializer(serializers.ModelSerializer):
@@ -31,7 +32,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'password', 'date_created', 'username', 'admin' )
+        fields = ('id', 'password', 'date_created', 'username', 'admin', 'active', 'first_name' )
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -47,7 +48,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('password', 'email', 'admin', 'username')
+        fields = ('password', 'email', 'admin', 'username', 'active', 'first_name')
         extra_kwargs = {
             'email' : {'required': False}
         }
@@ -57,7 +58,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create(
             email=validated_data['email'],
             admin=validated_data['admin'],
-            username=validated_data['username']
+            username=validated_data['username'],
+            active = validated_data['active'],
+            first_name = validated_data['first_name']
         )
 
         user.set_password(validated_data['password'])
@@ -68,7 +71,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class ChangePasswordSerializer(serializers.Serializer):
     model = User
-    
+
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
@@ -76,3 +79,4 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = "__all__"
+        depth = 1

@@ -10,3 +10,7 @@ class CategoryViewAPI(viewsets.ModelViewSet):
 class BrandViewAPI(viewsets.ModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
+
+class BrandDetailViewAPI(viewsets.ModelViewSet):
+    queryset = Brand.objects.all()
+    serializer_class = BrandDetailSerializer
