@@ -11,6 +11,8 @@ router.register('category_product_fetch', CategoryProductFetchAPIView, basename=
 router.register('home_banner_image', HomeBannerImageAPIView, basename='home_banner_image_api')
 router.register('size', SizeAPIView, basename='size_api')
 router.register('color', ColorAPIView, basename='color_api')
+router.register('search', SearchAPIView, basename='search_api')
+router.register('home_product', HomeProductDetailViewAPI, basename='home_product_api')
 urlpatterns = [
     path('', include(router.urls)),
 ]

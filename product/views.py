@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import *
 from rest_framework import viewsets
 from .serializers import *
-
+from django.db.models import Q
 
 class ProductViewAPI(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -17,6 +17,11 @@ class ProductDetailViewAPI(viewsets.ModelViewSet):
     serializer_class = ProductDetailSerializer
 
 
+class HomeProductDetailViewAPI(viewsets.ModelViewSet):
+    queryset = Product.objects.filter(home_product=True)
+    serializer_class = ProductDetailSerializer
+
+
 class ImageFetchAPIView(viewsets.ModelViewSet):
     serializer_class = ProductImageSerializer
     def get_queryset(self):
@@ -24,6 +29,21 @@ class ImageFetchAPIView(viewsets.ModelViewSet):
         queryset = ProductImage.objects.filter(product=product_id)
         return queryset
     
+
+class SearchAPIView(viewsets.ModelViewSet):
+    serializer_class = ProductDetailSerializer
+
+    def get_queryset(self):
+        keyword = self.request.query_params.get('keyword')
+        queryset = Product.objects.filter(
+            Q(name__icontains=keyword) | 
+            Q(description__icontains=keyword) | 
+            Q(category__name__icontains=keyword) | 
+            Q(brand__name__icontains=keyword)
+        )
+        return queryset
+
+
 class CategoryProductFetchAPIView(viewsets.ModelViewSet):
     serializer_class = ProductDetailSerializer
     def get_queryset(self):
