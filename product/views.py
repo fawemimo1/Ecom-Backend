@@ -43,26 +43,25 @@ class SearchAPIView(viewsets.ModelViewSet):
         )
         return queryset
 
-
 class CategoryProductFetchAPIView(viewsets.ModelViewSet):
     serializer_class = ProductDetailSerializer
     def get_queryset(self):
         category_id = self.request.query_params.get('category_id')
         queryset = Product.objects.filter(category=category_id)
         return queryset
-    
+
 class HomeBannerImageAPIView(viewsets.ModelViewSet):
     serializer_class = HomeBannerImageSerializer
     def get_queryset(self):
         queryset = HomeBannerImage.objects.all()
         return queryset
-    
+
 class SizeAPIView(viewsets.ModelViewSet):
     serializer_class = SizeSerializer
     def get_queryset(self):
         queryset = Size.objects.all()
         return queryset
-    
+
 
 class ColorAPIView(viewsets.ModelViewSet):
     serializer_class = ColorSerializer

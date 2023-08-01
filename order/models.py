@@ -17,11 +17,12 @@ class Address(models.Model):
     landmark = models.CharField(max_length=255)
     alternate_phone_number = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    address_type = models.CharField(max_length=255, default='home')
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return '{} {}'.format(self.user, self.address)
-    
+
     class Meta:
         ordering = ['-created_at']
 
@@ -31,7 +32,7 @@ class Order(models.Model):
     products = models.JSONField(null=True, blank=True)
     order_id = models.CharField(max_length=255, null=True, blank=True)
     user_address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
-    phone = models.CharField(max_length=255, null=True, blank=True)
+    # phone = models.CharField(max_length=255, null=True, blank=True)
     total = models.FloatField(null=True, blank=True)
     discount = models.FloatField(null=True, blank=True)
     cancel = models.BooleanField(default=False)
@@ -43,9 +44,9 @@ class Order(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.order_id, self.email)
-    
+
     class Meta:
-        ordering = ['-created_at']  
+        ordering = ['-created_at']
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -56,6 +57,6 @@ class Payment(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.order, self.created_at)
-    
+
     class Meta:
-        ordering = ['-created_at']  
+        ordering = ['-created_at']

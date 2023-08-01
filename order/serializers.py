@@ -16,7 +16,6 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = '__all__'
-        depth = 1
 
 class OrderDetailSerializer(serializers.ModelSerializer):
     address = AddressSerializer(read_only=True)

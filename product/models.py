@@ -15,6 +15,7 @@ class Product(models.Model):
     new = models.BooleanField(default=False)
     top_product = models.BooleanField(default=False)
     new_product = models.BooleanField(default=False)
+    home_product = models.BooleanField(default=False)
     show_size = models.BooleanField(default=False)
     show_color = models.BooleanField(default=False)
     show_gender = models.BooleanField(default=False)

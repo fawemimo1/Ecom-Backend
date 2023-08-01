@@ -20,7 +20,7 @@ class User(AbstractUser):
         ordering = ['-date_created']
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=255, null=True, blank=True)
     last_name = models.CharField(max_length=255, null=True, blank=True)
     email_address = models.CharField(max_length=255, null=True, blank=True)
@@ -34,7 +34,7 @@ class Profile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.user.username)
+        return str(self.user)
 
     class Meta:
         ordering = ['-created_at']
