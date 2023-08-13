@@ -1,9 +1,14 @@
 from rest_framework import serializers
-from .models import Order, Payment, Address
+from .models import Order, Payment, Address, Coupon
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
+        fields = '__all__'
+
+class CouponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coupon
         fields = '__all__'
 
 class PaymentSerializer(serializers.ModelSerializer):

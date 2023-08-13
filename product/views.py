@@ -16,6 +16,9 @@ class ProductDetailViewAPI(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
 
+class ImageViewAPI(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
 
 class HomeProductDetailViewAPI(viewsets.ModelViewSet):
     queryset = Product.objects.filter(home_product=True)
@@ -28,7 +31,14 @@ class ImageFetchAPIView(viewsets.ModelViewSet):
         product_id = self.request.query_params.get('product_id')
         queryset = ProductImage.objects.filter(product=product_id)
         return queryset
-    
+
+class ColorImageFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = ImageSerializer
+    def get_queryset(self):
+        product_id = self.request.query_params.get('product_id')
+        queryset = Image.objects.filter(product=product_id)
+        return queryset
+
 
 class SearchAPIView(viewsets.ModelViewSet):
     serializer_class = ProductDetailSerializer
@@ -36,10 +46,12 @@ class SearchAPIView(viewsets.ModelViewSet):
     def get_queryset(self):
         keyword = self.request.query_params.get('keyword')
         queryset = Product.objects.filter(
-            Q(name__icontains=keyword) | 
-            Q(description__icontains=keyword) | 
-            Q(category__name__icontains=keyword) | 
-            Q(brand__name__icontains=keyword)
+            Q(name__icontains=keyword) |
+            Q(description__icontains=keyword) |
+            Q(category__name__icontains=keyword) |
+            Q(brand__name__icontains=keyword) |
+            Q(gender__icontains=keyword)
+
         )
         return queryset
 

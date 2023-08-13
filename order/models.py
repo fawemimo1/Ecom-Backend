@@ -15,6 +15,7 @@ class Address(models.Model):
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
     landmark = models.CharField(max_length=255)
+    default = models.BooleanField(default=False)
     alternate_phone_number = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     address_type = models.CharField(max_length=255, default='home')
@@ -35,7 +36,14 @@ class Order(models.Model):
     # phone = models.CharField(max_length=255, null=True, blank=True)
     total = models.FloatField(null=True, blank=True)
     discount = models.FloatField(null=True, blank=True)
+    shipped = models.BooleanField(default=False)
     cancel = models.BooleanField(default=False)
+    delivered = models.BooleanField(default=False)
+    out_for_delivery = models.BooleanField(default=False)
+    returned = models.BooleanField(default=False)
+    shipped_date = models.DateTimeField(null=True, blank=True)
+    out_for_delivery_date = models.DateTimeField(null=True, blank=True)
+    delivered_date = models.DateTimeField(null=True, blank=True)
     payment_method = models.CharField(max_length=255, null=True, blank=True)
     status = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -43,7 +51,7 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
 
     def __str__(self):
-        return '{} {}'.format(self.order_id, self.email)
+        return '{}'.format(self.order_id)
 
     class Meta:
         ordering = ['-created_at']
@@ -60,3 +68,24 @@ class Payment(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+class Coupon(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE , null=True, blank=True)
+    title =  models.CharField(max_length=255)
+    code =  models.CharField(max_length=255)
+    description =  models.TextField(null=True,  blank =True)
+    image = models.ImageField(upload_to='coupon-image/', null=True, blank=True)
+    discount = models.FloatField(default=0)
+    number_available = models.IntegerField(default=0)
+    start_date = models.DateTimeField(null=True)
+    end_date = models.DateTimeField(null=True)
+    active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['-date_created']
+

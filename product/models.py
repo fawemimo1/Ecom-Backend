@@ -19,6 +19,7 @@ class Product(models.Model):
     show_size = models.BooleanField(default=False)
     show_color = models.BooleanField(default=False)
     show_gender = models.BooleanField(default=False)
+    color_image = models.JSONField(null=True)
     size = models.JSONField(null=True)
     gender =  models.JSONField(null=True)
     color =  models.JSONField(null=True)
@@ -37,10 +38,15 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='product/')
+    image = models.ImageField(upload_to='product/', null=True, blank=True)
 
     def __str__(self):
         return str(self.product)
+
+class Image(models.Model):
+    product = models.ForeignKey(Product, related_name='imagescolor', on_delete=models.CASCADE, null=True, blank=True)
+    color = models.TextField(null=True, blank=True)
+    image = models.ImageField(upload_to='product/', null=True, blank=True)
 
 
 class HomeBannerImage(models.Model):

@@ -12,6 +12,10 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImage
         fields = '__all__'
 
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
 
 class SizeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,6 +29,7 @@ class ColorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 class ProductDetailSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
+    color_image = ImageSerializer(many=True, read_only=True)
     category = CategorySerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
     class Meta:
