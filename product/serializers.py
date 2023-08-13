@@ -23,6 +23,12 @@ class SizeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Picture
+        fields = '__all__'
+
+
 class ColorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Color

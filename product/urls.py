@@ -15,6 +15,7 @@ router.register('size', SizeAPIView, basename='size_api')
 router.register('color', ColorAPIView, basename='color_api')
 router.register('search', SearchAPIView, basename='search_api')
 router.register('home_product', HomeProductDetailViewAPI, basename='home_product_api')
+router.register('picture', PictureAPIView, basename='picture_api')
 urlpatterns = [
     path('', include(router.urls)),
 ]

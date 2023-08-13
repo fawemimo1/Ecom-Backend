@@ -24,6 +24,9 @@ class HomeProductDetailViewAPI(viewsets.ModelViewSet):
     queryset = Product.objects.filter(home_product=True)
     serializer_class = ProductDetailSerializer
 
+class PictureAPIView(viewsets.ModelViewSet):
+    queryset = Picture.objects.all()
+    serializer_class = PictureSerializer
 
 class ImageFetchAPIView(viewsets.ModelViewSet):
     serializer_class = ProductImageSerializer

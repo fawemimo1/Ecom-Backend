@@ -47,7 +47,10 @@ class Image(models.Model):
     product = models.ForeignKey(Product, related_name='imagescolor', on_delete=models.CASCADE, null=True, blank=True)
     color = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='product/', null=True, blank=True)
+    data = models.JSONField(null=True, blank=True)
 
+class Picture(models.Model):
+    image = models.ImageField(upload_to='image/', null=True, blank=True)
 
 class HomeBannerImage(models.Model):
     image = models.ImageField(upload_to='banner/')
