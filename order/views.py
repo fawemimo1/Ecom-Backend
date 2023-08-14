@@ -34,7 +34,8 @@ class FetchCouponViewSet(viewsets.ModelViewSet):
     serializer_class = CouponSerializer
     def get_queryset(self):
         coupon = self.request.query_params.get('coupon')
-        queryset = Coupon.objects.filter(code=coupon)
+        user_id = self.request.query_params.get('user_id')
+        queryset = Coupon.objects.filter(code=coupon).exclude(users=user_id)
         return queryset
 
 class OrderDetailViewSet(viewsets.ModelViewSet):
