@@ -6,6 +6,17 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+class SubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
+        fields = '__all__'
+
+class SubCategoryDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
+        fields = '__all__'
+        depth = 1
+
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand

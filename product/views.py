@@ -52,6 +52,7 @@ class SearchAPIView(viewsets.ModelViewSet):
             Q(name__icontains=keyword) |
             Q(description__icontains=keyword) |
             Q(category__name__icontains=keyword) |
+            Q(subcategory__name__icontains=keyword) |
             Q(brand__name__icontains=keyword) |
             Q(gender__icontains=keyword)
 
@@ -63,6 +64,20 @@ class CategoryProductFetchAPIView(viewsets.ModelViewSet):
     def get_queryset(self):
         category_id = self.request.query_params.get('category_id')
         queryset = Product.objects.filter(category=category_id)
+        return queryset
+
+class SubCategoryProductFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = ProductDetailSerializer
+    def get_queryset(self):
+        subcategory_id = self.request.query_params.get('subcategory_id')
+        queryset = Product.objects.filter(subcategory=subcategory_id)
+        return queryset
+
+class BrandProductFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = ProductDetailSerializer
+    def get_queryset(self):
+        brand_id = self.request.query_params.get('brand_id')
+        queryset = Product.objects.filter(brand=brand_id)
         return queryset
 
 class HomeBannerImageAPIView(viewsets.ModelViewSet):
