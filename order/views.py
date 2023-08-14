@@ -22,6 +22,13 @@ class CouponListViewSet(viewsets.ModelViewSet):
     queryset = Coupon.objects.filter(active=True)
     serializer_class = CouponSerializer
 
+class AvailableCouponListViewSet(viewsets.ModelViewSet):
+    serializer_class = CouponSerializer
+
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user_id')
+        queryset = Coupon.objects.filter(active=True).exclude(users=user_id)
+        return queryset
 class OrderDetailViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderDetailSerializer

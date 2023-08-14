@@ -5,6 +5,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('order', OrderViewSet, basename='order')
 router.register('coupon', CouponListViewSet, basename='coupon-list')
+router.register('available-coupon', AvailableCouponListViewSet, basename='available-coupon-list')
 router.register('coupon-admin', CouponViewSet, basename='coupon')
 router.register('payment', PaymentViewSet, basename='payment')
 router.register('address', AddressViewSet, basename='address')

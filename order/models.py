@@ -80,6 +80,7 @@ class Coupon(models.Model):
     start_date = models.DateTimeField(null=True)
     end_date = models.DateTimeField(null=True)
     active = models.BooleanField(default=True)
+    users = models.ManyToManyField(User, related_name='coupon_user', blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
