@@ -17,4 +17,7 @@ router.register('address-fetch', AddressFetchAPIView, basename='address-fetch')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('pay/', start_payment, name="payment"),
+    path('payment/success/', handle_payment_success, name="payment_success")
+    
 ]

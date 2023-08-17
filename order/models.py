@@ -80,8 +80,9 @@ class Order(models.Model):
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    payment_data = models.JSONField()
+    order_payment_id = models.CharField(max_length=255, null=True, blank=True)
     status = models.CharField(max_length=255)
+    complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

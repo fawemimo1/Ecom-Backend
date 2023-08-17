@@ -6,6 +6,11 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = '__all__'
+
 class CouponSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coupon
