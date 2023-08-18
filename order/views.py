@@ -153,10 +153,13 @@ class CallbackView(APIView):
                 payment_object.complete = True     
                 payment_object.save()
                 order.save()
-
-                return Response({'status': 'Payment Done'}, status=status.HTTP_200_OK)
+                context = {'status': 'Payment Done'}
+                return render(request, 'payment_success_template.html', context)
+                # return Response({'status': 'Payment Done'}, status=status.HTTP_200_OK)
             else:
-                return Response({'status': 'Signature Mismatch!'}, status=status.HTTP_400_BAD_REQUEST)
+                context = {'status': 'Signature Mismatch!'}
+                return render(request, 'payment_failure_template.html', context)
+                # return Response({'status': 'Signature Mismatch!'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Handling failed payments
         else:
@@ -177,5 +180,7 @@ class CallbackView(APIView):
                 'error_source': error_source,
                 'error_reason': error_reason,
             }
+            context = {'status': error_status}
+            return render(request, 'payment_failure_template.html', context)
 
-            return Response({'error_data': error_status}, status=status.HTTP_401_UNAUTHORIZED)
+            # return Response({'error_data': error_status}, status=status.HTTP_401_UNAUTHORIZED)
