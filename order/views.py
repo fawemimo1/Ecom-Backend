@@ -9,10 +9,12 @@ import os
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
-
-
-PUBLIC_KEY = os.environ.get('RAZORPAY_PUBLIC_KEY')
-SECRET_KEY = os.environ.get('RAZORPAY_SECRET_KEY')
+from rest_framework import status
+from rest_framework.views import APIView
+from .constants import PaymentStatus
+from django.shortcuts import get_object_or_404
+PUBLIC_KEY = os.environ.get('RAZORPAY_PUBLIC_KEY', None)
+SECRET_KEY = os.environ.get('RAZORPAY_SECRET_KEY', None)
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
@@ -75,104 +77,105 @@ class AddressFetchAPIView(viewsets.ModelViewSet):
         queryset = Address.objects.filter(user=user_id)
         return queryset
     
-@api_view(['POST'])
-def start_payment(request):
-    # request.data is coming from frontend
-    order_id = request.query_params.get('order_id')
-    amount = request.query_params.get('amount')
+# Get Razorpay Key id and secret for authorizing razorpay client.
 
-    # setup razorpay client this is the client to whome user is paying money that's you
-    client = razorpay.Client(auth=(PUBLIC_KEY, SECRET_KEY))
-
-    # create razorpay order
-    # the amount will come in 'paise' that means if we pass 50 amount will become
-    # 0.5 rupees that means 50 paise so we have to convert it in rupees. So, we will 
-    # mumtiply it by 100 so it will be 50 rupees.
-    payment = client.order.create({"amount": int(amount) * 100, 
-                                   "currency": "INR", 
-                                   "payment_capture": "1"})
-
-    # we are saving an order with isPaid=False because we've just initialized the order
-    # we haven't received the money we will handle the payment succes in next 
-    # function
-    payment_data = Payment.objects.create(
-                                 order = order_id,
-                                 order_payment_id=payment['id'])
-
-    serializer = PaymentSerializer(payment_data)
-
-    """order response will be 
-    {'id': 17, 
-    'order_date': '23 January 2021 03:28 PM', 
-    'order_product': '**product name from frontend**', 
-    'order_amount': '**product amount from frontend**', 
-    'order_payment_id': 'order_G3NhfSWWh5UfjQ', # it will be unique everytime
-    'isPaid': False}"""
-
-    data = {
-        "payment": payment_data,
-        "payment_data": serializer.data
-    }
-    return Response(data)
+# Creating a Razorpay Client instance.
+razorpay_client = razorpay.Client(auth=("rzp_test_no6wvyoP4nQF2v", "tC4rjsgxUekbQZOPqPVTPocx"))
 
 
-@api_view(['POST'])
-def handle_payment_success(request):
-    # request.data is coming from frontend
-    res = json.loads(request.data["response"])
-
-    """res will be:
-    {'razorpay_payment_id': 'pay_G3NivgSZLx7I9e', 
-    'razorpay_order_id': 'order_G3NhfSWWh5UfjQ', 
-    'razorpay_signature': '76b2accbefde6cd2392b5fbf098ebcbd4cb4ef8b78d62aa5cce553b2014993c0'}
-    this will come from frontend which we will use to validate and confirm the payment
+class PaymentView(APIView):
+    """
+    APIView for Creating Razorpay Order.
+    :return: list of all necessary values to open Razorpay SDK
     """
 
-    ord_id = ""
-    raz_pay_id = ""
-    raz_signature = ""
+    http_method_names = ('post',)
 
-    # res.keys() will give us list of keys in res
-    for key in res.keys():
-        if key == 'razorpay_order_id':
-            ord_id = res[key]
-        elif key == 'razorpay_payment_id':
-            raz_pay_id = res[key]
-        elif key == 'razorpay_signature':
-            raz_signature = res[key]
+    def post(self, request, *args, **kwargs):
+        order_id = request.data.get('order_id')  # Use request.data instead of query_params for POST requests
+        name = request.data.get('name')
+        amount = request.data.get('amount')
 
-    # get order by payment_id which we've created earlier with isPaid=False
-    payment = Payment.objects.get(order_payment_id=ord_id)
-    order = Order.objects.get(id=payment.order)
+        # Create Order
+        razorpay_order = razorpay_client.order.create(
+            {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
+        )
 
-    # we will pass this whole data in razorpay client to verify the payment
-    data = {
-        'razorpay_order_id': ord_id,
-        'razorpay_payment_id': raz_pay_id,
-        'razorpay_signature': raz_signature
-    }
+        # Save the order in DB
+        order = Payment.objects.create(
+            name=name, amount=amount, provider_order_id=razorpay_order["id"],
+            order_id=order_id,  # Use the provided order_id here
+            status='Pending',
+        )
 
-    client = razorpay.Client(auth=(PUBLIC_KEY, SECRET_KEY))
+        data = {
+            "name": name,
+            "merchantId": "RAZOR_KEY",
+            "amount": amount,
+            "currency": 'INR',
+            "orderId": razorpay_order["id"],
+        }
 
-    # checking if the transaction is valid or not by passing above data dictionary in 
-    # razorpay client if it is "valid" then check will return None
-    check = client.utility.verify_payment_signature(data)
+        # Save order details to frontend
+        return Response(data, status=status.HTTP_200_OK)
 
-    if check is not None:
-        print("Redirect to error url or error page")
-        return Response({'error': 'Something went wrong'})
+class CallbackView(APIView):
+    
+    """
+    APIView for Verifying Razorpay Order.
+    :return: Success and failure response messages
+    """
 
-    # if payment is successful that means check is None then we will turn isPaid=True
-    payment.complete = True
-    payment.save()
+    @staticmethod
+    def post(request, *args, **kwargs):
 
-    # we will turn isPaid=True in order as well
-    order.paid = True
-    order.save()
+        # getting data form request
+        response = request.data.dict()
 
+        """
+            if razorpay_signature is present in the request 
+            it will try to verify
+            else throw error_reason
+        """
+        if "razorpay_signature" in response:
 
-    res_data = {
-        'message': 'payment successfully received!'
-    }
+            # Verifying Payment Signature
+            data = razorpay_client.utility.verify_payment_signature(response)
 
-    return Response(res_data)
+            # if we get here True signature
+            if data:
+                payment_object = get_object_or_404(Payment, provider_order_id=response['razorpay_order_id'])
+                order = get_object_or_404(Order, id=payment_object.order.id)  
+                order.paid = True         # razorpay_payment = RazorpayPayment.objects.get(order_id=response['razorpay_order_id'])
+                payment_object.status = PaymentStatus.SUCCESS
+                payment_object.payment_id = response['razorpay_payment_id']
+                payment_object.signature_id = response['razorpay_signature']     
+                payment_object.complete = True     
+                payment_object.save()
+                order.save()
+
+                return Response({'status': 'Payment Done'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'status': 'Signature Mismatch!'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Handling failed payments
+        else:
+            error_code = response['error[code]']
+            error_description = response['error[description]']
+            error_source = response['error[source]']
+            error_reason = response['error[reason]']
+            error_metadata = json.loads(response['error[metadata]'])
+            razorpay_payment =   Payment.objects.get(provider_order_id=error_metadata['order_id'])
+            razorpay_payment.payment_id = error_metadata['payment_id']
+            razorpay_payment.signature_id = "None"
+            razorpay_payment.status = PaymentStatus.FAILURE
+            razorpay_payment.save()
+
+            error_status = {
+                'error_code': error_code,
+                'error_description': error_description,
+                'error_source': error_source,
+                'error_reason': error_reason,
+            }
+
+            return Response({'error_data': error_status}, status=status.HTTP_401_UNAUTHORIZED)
