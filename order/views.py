@@ -125,7 +125,6 @@ class PaymentView(APIView):
         razorpay_order = razorpay_client.order.create(
             {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
         )
-
         # Save the order in DB
         order = Payment.objects.create(
             name=name, amount=amount, provider_order_id=razorpay_order["id"],
