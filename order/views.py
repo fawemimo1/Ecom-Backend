@@ -77,6 +77,30 @@ class AddressFetchAPIView(viewsets.ModelViewSet):
         queryset = Address.objects.filter(user=user_id)
         return queryset
     
+class PaymentUserFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = PaymentDetailSerializer
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user_id')
+        queryset = Payment.objects.filter(user=user_id)
+        return queryset
+
+class PaymentSuccessFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = PaymentDetailSerializer
+    def get_queryset(self):
+        queryset = Payment.objects.filter(status='Success')
+        return queryset
+    
+class PaymentDetailAPIView(viewsets.ModelViewSet):
+    serializer_class = PaymentDetailSerializer
+    queryset = Payment.objects.all()
+    
+class PaymentOrderFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = PaymentDetailSerializer
+    def get_queryset(self):
+        order_id = self.request.query_params.get('order_id')
+        queryset = Payment.objects.filter(order=order_id)
+        return queryset
+
 # Get Razorpay Key id and secret for authorizing razorpay client.
 
 # Creating a Razorpay Client instance.
@@ -95,6 +119,7 @@ class PaymentView(APIView):
         order_id = request.data.get('order_id')  # Use request.data instead of query_params for POST requests
         name = request.data.get('name')
         amount = request.data.get('amount')
+        user = request.data.get('user')
 
         # Create Order
         razorpay_order = razorpay_client.order.create(
@@ -106,6 +131,7 @@ class PaymentView(APIView):
             name=name, amount=amount, provider_order_id=razorpay_order["id"],
             order_id=order_id,  # Use the provided order_id here
             status='Pending',
+            user=user
         )
 
         data = {

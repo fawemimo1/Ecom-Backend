@@ -80,6 +80,7 @@ class Order(models.Model):
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255)
     provider_order_id = models.CharField(max_length=255)
     signature_id =  models.CharField(max_length=255)
