@@ -23,5 +23,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('razorpay_order', PaymentView.as_view(), name='razorpay_order'),
     path('razorpay_callback', CallbackView.as_view(), name='razorpay_callback'),
+    path('pincode_address/', PincodeAddressView.as_view(), name='pincode_address'),
+    path('pincode_check/', PincodeCheckView.as_view(), name='pincode_check'),
     
 ]
