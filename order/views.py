@@ -13,6 +13,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .constants import PaymentStatus
 from django.shortcuts import get_object_or_404
+from geopy.geocoders import Nominatim
+from math import radians, cos, sin, asin, sqrt
+from datetime import timedelta,date
+from rest_framework.exceptions import APIException
+today = date.today()
+
 PUBLIC_KEY = os.environ.get('RAZORPAY_PUBLIC_KEY', None)
 SECRET_KEY = os.environ.get('RAZORPAY_SECRET_KEY', None)
 
@@ -215,3 +221,102 @@ class CallbackView(APIView):
             return render(request, 'payment_failure_template.html', context)
 
             # return Response({'error_data': error_status}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+
+class PincodeAddressView(APIView):
+    def get(self, request):
+        try:
+            zipcode = self.request.GET.get('zipcode')
+            geolocator = Nominatim(user_agent="jomodi")
+            location = geolocator.geocode(zipcode)
+            print('location------->', location)
+            data = location.raw
+            loc_data = data['display_name'].split(",")
+            if loc_data[-1].strip() != "India":
+                data= {'message':'Please enter India pincode'}
+                return Response(data, status=400)
+            else:
+                dict = {'Area':loc_data[-5].strip(), 'district':loc_data[-4].strip().replace('District',''),
+                        'state':loc_data[-3].strip(), 'pincode':loc_data[-2].strip(), 'country':loc_data[-1].strip()}
+                
+                return Response(dict, status=status.HTTP_200_OK)
+        except Exception as e:
+            data= {'message':'Error: Please try again after sometime'}
+            return Response(data, status=400)
+
+        # Save order details to frontend
+
+
+
+class PincodeCheckView(APIView):
+
+    def get(self, request):
+        try:
+            zipcode1 = self.request.GET.get('zipcode1')
+            zipcode2 = self.request.GET.get('zipcode2')
+            geolocator = Nominatim(user_agent="jomodi")
+            location1 = geolocator.geocode(zipcode1)
+            location2 = geolocator.geocode(zipcode2)
+
+            lat1 = location1.latitude
+            lon1 = location1.longitude
+
+            lat2 = location2.latitude
+            lon2 = location2.longitude
+
+            # radians which converts from degrees to radians. 
+            lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+            # Haversine formula  
+            dlon = lon2 - lon1  
+            dlat = lat2 - lat1 
+            a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+            c = 2 * asin(sqrt(a))  
+            r = 6371 # Radius of earth in kilometers
+            km_dis = int(c * r) # calculate the result 
+
+            if km_dis < 50:
+                d3 = date.today() + timedelta(days=1)
+                msg="delivery by Tomorrow, {day}".format(day=d3.strftime("%A"))
+                data= {'message':msg}
+                return Response(data, status=status.HTTP_200_OK)
+            elif km_dis < 100 & km_dis >= 50:
+                d3 = date.today() + timedelta(days=2)
+                msg="delivery by {day}".format(day=d3.strftime("%d %b, %A"))
+                data= {'message':msg}
+                return Response(data, status=status.HTTP_200_OK)
+            elif km_dis < 300 & km_dis >= 100:
+                d3 = date.today() + timedelta(days=3)
+                msg= "delivery by {day}".format(day=d3.strftime("%d %b, %A"))
+                data= {'message':msg}
+                return Response(data, status=status.HTTP_200_OK)
+            elif km_dis <600 and km_dis >= 300:
+                d3 = date.today() + timedelta(days=4)
+                msg= "delivery by {day}".format(day=d3.strftime("%d %b, %A"))
+                data= {'message':msg}
+                return Response(data, status=status.HTTP_200_OK)
+            elif km_dis <1000 and km_dis >= 600:
+                d3 = date.today() + timedelta(days=5)
+                msg= "delivery by {day}".format(day=d3.strftime("%d %b, %A"))
+                data= {'message':msg}
+                return Response(data, status=status.HTTP_200_OK)
+            elif km_dis <1500 and km_dis >= 1000:
+                d3 = date.today() + timedelta(days=6)
+                msg= "delivery by {day}".format(day=d3.strftime("%d %b, %A"))
+                data= {'message':msg}
+                return Response(data, status=status.HTTP_200_OK)
+            elif km_dis <3000 and km_dis >=1500:
+                d3 = date.today() + timedelta(days=7)
+                msg= "delivery by {day}".format(day=d3.strftime("%d %b, %A"))
+                data= {'message':msg}
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                data= {'message':'Order could not deliver for this address'}
+                return Response(data, status=400)
+        except Exception as e:
+            data= {'message':'Error: Please try again after sometime'}
+            return Response(data, status=400)
+
+      
+        
