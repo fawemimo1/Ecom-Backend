@@ -82,8 +82,13 @@ class BrandProductFetchAPIView(viewsets.ModelViewSet):
 
 class HomeBannerImageAPIView(viewsets.ModelViewSet):
     serializer_class = HomeBannerImageSerializer
+
     def get_queryset(self):
         queryset = HomeBannerImage.objects.all()
+        filter = self.request.query_params.get('filter')
+
+        if filter:
+            queryset = HomeBannerImage.objects.filter(visibility=True)
         return queryset
 
 class SizeAPIView(viewsets.ModelViewSet):

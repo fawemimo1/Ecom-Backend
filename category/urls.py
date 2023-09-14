@@ -10,6 +10,7 @@ router.register('subcategory-category-fetch', SubCategoryCategoryFetchAPIView, b
 router.register('brand', BrandViewAPI, basename='brand_api')
 router.register('brand-detail', BrandDetailViewAPI, basename='brand_api')
 router.register('brand-subcategory-fetch', BrandSubCategoryFetchAPIView, basename='brand_api')
+router.register('type', TypeViewAPI, basename='type_api')
 urlpatterns = [
     path('', include(router.urls)),
 ]

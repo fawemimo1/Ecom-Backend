@@ -56,6 +56,9 @@ class Picture(models.Model):
 class HomeBannerImage(models.Model):
     image = models.ImageField(upload_to='banner/')
     visibility = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
 
     def __str__(self):
         return str(self.image)

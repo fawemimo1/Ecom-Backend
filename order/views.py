@@ -13,6 +13,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .constants import PaymentStatus
 from django.shortcuts import get_object_or_404
+from geopy.geocoders import Nominatim
+from math import radians, cos, sin, asin, sqrt
+from datetime import timedelta,date
+from rest_framework.exceptions import APIException
+today = date.today()
+
 PUBLIC_KEY = os.environ.get('RAZORPAY_PUBLIC_KEY', None)
 SECRET_KEY = os.environ.get('RAZORPAY_SECRET_KEY', None)
 
@@ -211,11 +217,7 @@ class CallbackView(APIView):
             # return Response({'error_data': error_status}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-from geopy.geocoders import Nominatim
-from math import radians, cos, sin, asin, sqrt
-from datetime import timedelta,date
-from rest_framework.exceptions import APIException
-today = date.today()
+
 
 class PincodeAddressView(APIView):
     def get(self, request):
