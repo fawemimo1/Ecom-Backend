@@ -11,6 +11,7 @@ router.register('fetch-coupon', FetchCouponViewSet, basename='fetch-coupon')
 router.register('payment', PaymentViewSet, basename='payment')
 router.register('payment-detail', PaymentDetailAPIView, basename='payment-detail')
 router.register('payment-success', PaymentSuccessFetchAPIView, basename='payment-success')
+router.register('payment-pending', PaymentPendingFetchAPIView, basename='payment-pending')
 router.register('payment-user', PaymentUserFetchAPIView, basename='payment-user')
 router.register('payment-order', PaymentOrderFetchAPIView, basename='payment-order')
 router.register('address', AddressViewSet, basename='address')
@@ -23,5 +24,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('razorpay_order', PaymentView.as_view(), name='razorpay_order'),
     path('razorpay_callback', CallbackView.as_view(), name='razorpay_callback'),
-    
+
 ]

@@ -55,7 +55,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-             'templates'
+             os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # DATABASES = {
 #     'default': {
 #          'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'postgres', 
-#         'USER': 'postgres', 
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
 #         'PASSWORD': 'danielTano123@',
-#         'HOST': 'db.sifqotuaqevztreswtbr.supabase.co', 
+#         'HOST': 'db.sifqotuaqevztreswtbr.supabase.co',
 #         'PORT': '5432',
 #     }
 # }

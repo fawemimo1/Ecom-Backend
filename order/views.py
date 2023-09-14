@@ -39,7 +39,7 @@ class AvailableCouponListViewSet(viewsets.ModelViewSet):
         user_id = self.request.query_params.get('user_id')
         queryset = Coupon.objects.filter(active=True).exclude(users=user_id)
         return queryset
-    
+
 class FetchCouponViewSet(viewsets.ModelViewSet):
     serializer_class = CouponSerializer
     def get_queryset(self):
@@ -76,7 +76,7 @@ class AddressFetchAPIView(viewsets.ModelViewSet):
         user_id = self.request.query_params.get('user_id')
         queryset = Address.objects.filter(user=user_id)
         return queryset
-    
+
 class PaymentUserFetchAPIView(viewsets.ModelViewSet):
     serializer_class = PaymentDetailSerializer
     def get_queryset(self):
@@ -89,11 +89,17 @@ class PaymentSuccessFetchAPIView(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Payment.objects.filter(status='Success')
         return queryset
-    
+
+class PaymentPendingFetchAPIView(viewsets.ModelViewSet):
+    serializer_class = PaymentDetailSerializer
+    def get_queryset(self):
+        queryset = Payment.objects.filter(status='Pending')
+        return queryset
+
 class PaymentDetailAPIView(viewsets.ModelViewSet):
     serializer_class = PaymentDetailSerializer
     queryset = Payment.objects.all()
-    
+
 class PaymentOrderFetchAPIView(viewsets.ModelViewSet):
     serializer_class = PaymentDetailSerializer
     def get_queryset(self):
@@ -130,7 +136,7 @@ class PaymentView(APIView):
             name=name, amount=amount, provider_order_id=razorpay_order["id"],
             order_id=order_id,  # Use the provided order_id here
             status='Pending',
-            user=user
+            user_id=user
         )
 
         data = {
@@ -145,7 +151,7 @@ class PaymentView(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class CallbackView(APIView):
-    
+
     """
     APIView for Verifying Razorpay Order.
     :return: Success and failure response messages
@@ -158,7 +164,7 @@ class CallbackView(APIView):
         response = request.data.dict()
 
         """
-            if razorpay_signature is present in the request 
+            if razorpay_signature is present in the request
             it will try to verify
             else throw error_reason
         """
@@ -170,12 +176,12 @@ class CallbackView(APIView):
             # if we get here True signature
             if data:
                 payment_object = get_object_or_404(Payment, provider_order_id=response['razorpay_order_id'])
-                order = get_object_or_404(Order, id=payment_object.order.id)  
+                order = get_object_or_404(Order, id=payment_object.order.id)
                 order.paid = True         # razorpay_payment = RazorpayPayment.objects.get(order_id=response['razorpay_order_id'])
                 payment_object.status = PaymentStatus.SUCCESS
                 payment_object.payment_id = response['razorpay_payment_id']
-                payment_object.signature_id = response['razorpay_signature']     
-                payment_object.complete = True     
+                payment_object.signature_id = response['razorpay_signature']
+                payment_object.complete = True
                 payment_object.save()
                 order.save()
                 context = {'status': 'Payment Done'}
