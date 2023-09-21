@@ -6,34 +6,60 @@ from django.db.models import Q
 
 class ProductViewAPI(viewsets.ModelViewSet):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ProductDetailSerializer
+        elif self.action == 'retrieve':
+            return ProductDetailSerializer
+        return ProductSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+        category = self.request.query_params.get('category')
+        subcategory = self.request.query_params.get('subcategory')
+        brand = self.request.query_params.get('brand')
+        category_type = self.request.query_params.get('category_type')
+        home = self.request.query_params.get('home')
+
+        if category is not None:
+            queryset = queryset.filter(category=category)
+
+        if subcategory is not None:
+            queryset = queryset.filter(subcategory=subcategory)
+
+        if brand is not None:
+            queryset = queryset.filter(brand=brand)
+
+        if category_type is not None:
+            queryset = queryset.filter(category_type=category_type)
+        
+        if home is not None:
+            queryset = queryset.filter(home_product=True)
+        
+        return queryset
 
 class ProductImageViewAPI(viewsets.ModelViewSet):
     queryset = ProductImage.objects.all()
     serializer_class = ProductImageSerializer
 
-class ProductDetailViewAPI(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductDetailSerializer
+    def get_queryset(self):
+        queryset = self.queryset
+        product = self.request.query_params.get('product')
+        if product is not None:
+            queryset = queryset.filter(product=product)
+        return queryset
+
 
 class ImageViewAPI(viewsets.ModelViewSet):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
 
-class HomeProductDetailViewAPI(viewsets.ModelViewSet):
-    queryset = Product.objects.filter(home_product=True)
-    serializer_class = ProductDetailSerializer
 
 class PictureAPIView(viewsets.ModelViewSet):
     queryset = Picture.objects.all()
     serializer_class = PictureSerializer
 
-class ImageFetchAPIView(viewsets.ModelViewSet):
-    serializer_class = ProductImageSerializer
-    def get_queryset(self):
-        product_id = self.request.query_params.get('product_id')
-        queryset = ProductImage.objects.filter(product=product_id)
-        return queryset
 
 class ColorImageFetchAPIView(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
@@ -59,26 +85,6 @@ class SearchAPIView(viewsets.ModelViewSet):
         )
         return queryset
 
-class CategoryProductFetchAPIView(viewsets.ModelViewSet):
-    serializer_class = ProductDetailSerializer
-    def get_queryset(self):
-        category_id = self.request.query_params.get('category_id')
-        queryset = Product.objects.filter(category=category_id)
-        return queryset
-
-class SubCategoryProductFetchAPIView(viewsets.ModelViewSet):
-    serializer_class = ProductDetailSerializer
-    def get_queryset(self):
-        subcategory_id = self.request.query_params.get('subcategory_id')
-        queryset = Product.objects.filter(subcategory=subcategory_id)
-        return queryset
-
-class BrandProductFetchAPIView(viewsets.ModelViewSet):
-    serializer_class = ProductDetailSerializer
-    def get_queryset(self):
-        brand_id = self.request.query_params.get('brand_id')
-        queryset = Product.objects.filter(brand=brand_id)
-        return queryset
 
 class HomeBannerImageAPIView(viewsets.ModelViewSet):
     serializer_class = HomeBannerImageSerializer

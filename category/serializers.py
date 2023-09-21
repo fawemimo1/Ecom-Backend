@@ -8,7 +8,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class TypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Type
+        model = CategoryType
         fields = '__all__'
 
 class SubCategorySerializer(serializers.ModelSerializer):

@@ -9,47 +9,54 @@ class CategoryViewAPI(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        type_id = self.request.query_params.get('type_id')
-        if type_id:
-            queryset = Category.objects.filter(type = type_id)
         return queryset
 
 class SubCategoryViewAPI(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all()
-    serializer_class = SubCategorySerializer
-
-class SubCategoryDetailViewAPI(viewsets.ModelViewSet):
-    queryset = SubCategory.objects.all()
-    serializer_class = SubCategoryDetailSerializer
-
-class SubCategoryCategoryFetchAPIView(viewsets.ModelViewSet):
-    serializer_class = SubCategoryDetailSerializer
-    def get_queryset(self):
-        cat_id = self.request.query_params.get('cat_id')
-        queryset = SubCategory.objects.filter(category =  cat_id)
-        return queryset
     
-class BrandSubCategoryFetchAPIView(viewsets.ModelViewSet):
-    serializer_class = BrandDetailSerializer
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SubCategoryDetailSerializer
+        return SubCategorySerializer
+
     def get_queryset(self):
-        subcat_id = self.request.query_params.get('subcat_id')
-        queryset = Brand.objects.filter(subcategory =  subcat_id)
+        queryset = self.queryset
+        category = self.request.query_params.get('category')
+        category_type = self.request.query_params.get('category_type')
+        if category is not None:
+            queryset = queryset.filter(category=category)
+
+        if category_type is not None:
+            queryset = queryset.filter(category_type=category_type)
+        
         return queryset
+
+
 
 class BrandViewAPI(viewsets.ModelViewSet):
     queryset = Brand.objects.all()
-    serializer_class = BrandSerializer
 
-class BrandDetailViewAPI(viewsets.ModelViewSet):
-    queryset = Brand.objects.all()
-    serializer_class = BrandDetailSerializer
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return BrandDetailSerializer
+        return BrandSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+        subcategory = self.request.query_params.get('subcategory')
+
+        if subcategory is not None:
+            queryset = queryset.filter(subcategory=subcategory)
+        return queryset
+
 
 class TypeViewAPI(viewsets.ModelViewSet):
-    queryset = Type.objects.all()
+    queryset = CategoryType.objects.all()
     serializer_class = TypeSerializer
 
-    # def get_queryset(self):
-    #     queryset = self.queryset
-    #     type_id = self.request.query_params.get('type_id')
-    #     if type_id:
-    #         queryset = Category.objects.filter(type = type_id)
+    def get_queryset(self):
+        queryset = self.queryset
+        category = self.request.query_params.get('category')
+        if category is not None:
+            queryset = queryset.filter(category=category)
+        return queryset

@@ -1,5 +1,5 @@
 from django.db import models
-from category.models import Category, Brand,  SubCategory
+from category.models import Category, Brand,  SubCategory, CategoryType
 from django.conf import settings
 User = settings.AUTH_USER_MODEL
 # Create your models here.
@@ -26,6 +26,7 @@ class Product(models.Model):
     available_quantity = models.IntegerField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, null=True, blank=True)
+    category_type = models.ForeignKey(CategoryType, on_delete=models.CASCADE, null=True, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
