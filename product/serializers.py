@@ -36,7 +36,7 @@ class ColorSerializer(serializers.ModelSerializer):
 class ProductDetailSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     color_image = ImageSerializer(many=True, read_only=True)
-    category = CategorySerializer(read_only=True)
+    category = CategoryDetailSerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
     subcategory = SubCategorySerializer(read_only=True)
     class Meta:
