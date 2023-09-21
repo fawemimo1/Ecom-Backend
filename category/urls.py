@@ -4,7 +4,6 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('category', CategoryViewAPI, basename='category_api')
-router.register('category-detail', CategoryDetailViewAPI,  basename='category_api_detail')
 router.register('subcategory', SubCategoryViewAPI, basename='subcategory_api')
 router.register('brand', BrandViewAPI, basename='brand_api')
 router.register('type', TypeViewAPI, basename='type_api')
