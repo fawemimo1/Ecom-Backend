@@ -14,6 +14,11 @@ class CategoryViewAPI(viewsets.ModelViewSet):
             queryset = Category.objects.filter(type = type_id)
         return queryset
 
+class CategoryDetailViewAPI(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategoryDetailSerializer
+
+
 class SubCategoryViewAPI(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
@@ -28,7 +33,7 @@ class SubCategoryCategoryFetchAPIView(viewsets.ModelViewSet):
         cat_id = self.request.query_params.get('cat_id')
         queryset = SubCategory.objects.filter(category =  cat_id)
         return queryset
-    
+
 class BrandSubCategoryFetchAPIView(viewsets.ModelViewSet):
     serializer_class = BrandDetailSerializer
     def get_queryset(self):

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from .models import *
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import status
 from .serializers import *
 from django.db.models import Q
 
@@ -90,6 +92,22 @@ class HomeBannerImageAPIView(viewsets.ModelViewSet):
         if filter:
             queryset = HomeBannerImage.objects.filter(visibility=True)
         return queryset
+
+    def partial_update(self, request, pk):
+        try:
+            banner = HomeBannerImage.objects.get(pk=pk)
+            visibility = request.data.get('visibility', False)  # Get the new visibility value from request data
+
+            # Set visibility to False for all other banners
+            HomeBannerImage.objects.exclude(pk=pk).update(visibility=False)
+
+            banner.visibility = visibility  # Set the visibility for the specific banner
+            banner.save()
+
+            serializer = HomeBannerImageSerializer(banner)
+            return Response(serializer.data)
+        except HomeBannerImage.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class SizeAPIView(viewsets.ModelViewSet):
     serializer_class = SizeSerializer

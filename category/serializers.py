@@ -6,6 +6,13 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+        depth = 1
+
+
 class TypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Type
