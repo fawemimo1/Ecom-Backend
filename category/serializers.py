@@ -18,6 +18,13 @@ class TypeSerializer(serializers.ModelSerializer):
         model = CategoryType
         fields = '__all__'
 
+class CategoryTypeDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryType
+        fields = '__all__'
+        depth = 1
+
+
 class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory

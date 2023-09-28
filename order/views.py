@@ -238,12 +238,12 @@ class PincodeAddressView(APIView):
                 data= {'message':'Please enter India pincode'}
                 return Response(data, status=400)
             else:
-                dict = {'Area':loc_data[-5].strip(), 'district':loc_data[-4].strip().replace('District',''),
-                        'state':loc_data[-3].strip(), 'pincode':loc_data[-2].strip(), 'country':loc_data[-1].strip()}
-                
+                dict = {'Area':loc_data[-5].strip(), 'pincode':loc_data[-4].strip(),
+                        'district':loc_data[-3].strip().replace('District',''), 'state':loc_data[-2].strip(), 'country':loc_data[-1].strip()}
+
                 return Response(dict, status=status.HTTP_200_OK)
         except Exception as e:
-            data= {'message':'Error: Please try again after sometime'}
+            data= {'message':'Error: Please Enter A Valid Pin Code'}
             return Response(data, status=400)
 
         # Save order details to frontend
@@ -266,15 +266,15 @@ class PincodeCheckView(APIView):
             lat2 = location2.latitude
             lon2 = location2.longitude
 
-            # radians which converts from degrees to radians. 
+            # radians which converts from degrees to radians.
             lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
-            # Haversine formula  
-            dlon = lon2 - lon1  
-            dlat = lat2 - lat1 
+            # Haversine formula
+            dlon = lon2 - lon1
+            dlat = lat2 - lat1
             a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-            c = 2 * asin(sqrt(a))  
+            c = 2 * asin(sqrt(a))
             r = 6371 # Radius of earth in kilometers
-            km_dis = int(c * r) # calculate the result 
+            km_dis = int(c * r) # calculate the result
 
             if km_dis < 50:
                 d3 = date.today() + timedelta(days=1)
@@ -318,5 +318,4 @@ class PincodeCheckView(APIView):
             data= {'message':'Error: Please try again after sometime'}
             return Response(data, status=400)
 
-      
-        
+
