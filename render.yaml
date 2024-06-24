@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: Ecom-Backend
+    buildCommand: "./build.sh"
+    env: python
+    startCommand:  "gunicorn backend.wsgi:application"
